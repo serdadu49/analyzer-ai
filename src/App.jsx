@@ -453,21 +453,26 @@ export default function App() {
   <IntelijenDashboardView aggregatedStats={aggregatedStats} />
 )}
 
- {
-  // Prepare data for 2019 vs 2024 comparison
-  const chartData = useMemo(() => {
-    return partaiList.map(partai => {
-      const v2019 = aggregatedStats['2019'][tingkat].totalSuara[partai] || 0;
-      const v2024 = aggregatedStats['2024'][tingkat].totalSuara[partai] || 0;
-      return {
-        name: partai,
-        'Suara 2019': v2019,
-        'Suara 2024': v2024,
-        kenaikan: v2024 - v2019,
-        persentase: v2019 === 0 ? (v2024 > 0 ? 100 : 0) : ((v2024 - v2019) / v2019 * 100).toFixed(1)
-      };
-    });
-  }, [aggregatedStats, tingkat, partaiList]);
+ // Prepare data for 2019 vs 2024 comparison
+const chartData = useMemo(() => {
+  return partaiList.map(partai => {
+    const v2019 = aggregatedStats['2019'][tingkat].totalSuara[partai] || 0;
+    const v2024 = aggregatedStats['2024'][tingkat].totalSuara[partai] || 0;
+
+    return {
+      name: partai,
+      'Suara 2019': v2019,
+      'Suara 2024': v2024,
+      kenaikan: v2024 - v2019,
+      persentase:
+        v2019 === 0
+          ? v2024 > 0
+            ? 100
+            : 0
+          : ((v2024 - v2019) / v2019 * 100).toFixed(1)
+    };
+  });
+}, [aggregatedStats, tingkat, partaiList]);
 
   return (
     <div className="space-y-6 fade-in">
